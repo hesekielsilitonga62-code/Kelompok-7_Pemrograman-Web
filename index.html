@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Profile</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS v4 Browser Build -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <style type="text/tailwindcss">
+    @theme {
+      --font-poppins: "Poppins", sans-serif;
+      --font-publicsans: "Public Sans", sans-serif;
+      --font-abel: "Abel", sans-serif;
+      --color-brand-yellow: #f9e902;
+    }
+
+    @layer components {
+      .btn-action {
+        @apply flex-1 rounded-lg bg-[#efefef] py-1.5 text-center text-sm font-semibold text-black transition hover:bg-[#dbdbdb];
+      }
+      .highlight-ring {
+        @apply flex h-20 w-20 items-center justify-center rounded-full border border-neutral-300 bg-neutral-100 p-1;
+      }
+      .tab-item {
+        @apply flex items-center justify-center py-4 text-neutral-400 hover:text-black;
+      }
+      .tab-active {
+        @apply border-t-2 border-black text-black;
+      }
+    }
+    </style>
+</head>
+<body class="min-h-screen bg-white text-black">
+
+  <main class="mx-auto max-w-4xl px-4 py-8">
+    
+    <!-- HEADER PROFIL -->
+    <header class="mb-8 flex flex-col gap-6 md:flex-row md:items-start md:gap-12">
+      
+      <!-- FOTO PROFIL & CATATAN -->
+      <figure class="relative mx-auto flex-shrink-0 md:mx-0">
+        <!-- TAG IMG FOTO PROFIL -->
+        <img 
+          src="profile.jpg" 
+          alt="Foto Profil" 
+          class="h-32 w-32 rounded-full border border-neutral-200 object-cover md:h-36 md:w-36 bg-neutral-100"
+        />
+      </figure>
+
+      <!-- DETAIL PENGGUNA -->
+      <section class="flex flex-1 flex-col gap-4">
+        
+        <!-- Username & Pengaturan -->
+        <div class="flex items-center gap-4">
+          <h1 class="text-xl font-semibold text-black">Monck_n_key</h1>
+          <button type="button" aria-label="Pengaturan">
+            <!-- TAG IMG IKON PENGATURAN / GEAR -->
+            <img 
+              src="setting.png" 
+              alt="Pengaturan" 
+              class="h-6 w-6 object-contain"
+            />
+          </button>
+        </div>
+
+        <!-- Bio / Nama Singkat -->
+        <p class="text-sm font-medium text-neutral-700">momonk</p>
+
+        <!-- Statistik -->
+        <ul class="flex items-center gap-6 text-sm text-neutral-700">
+          <li><strong class="font-semibold text-black">0</strong> kiriman</li>
+          <li><strong class="font-semibold text-black">0</strong> pengikut</li>
+          <li><strong class="font-semibold text-black">0</strong> diikuti</li>
+        </ul>
+
+        <!-- Tombol Aksi -->
+        <div class="flex items-center gap-3 pt-2">
+          <button type="button" class="btn-action">Edit profil</button>
+          <button type="button" class="btn-action">Lihat arsip</button>
+        </div>
+
+      </section>
+
+    </header>
+
+    <!-- HIGHLIGHTS / SOROTAN -->
+    <section aria-label="Sorotan Cerita" class="mb-10 flex items-center gap-6 overflow-x-auto pb-2">
+      
+      <!-- Highlight 1 -->
+      <article class="flex flex-col items-center gap-2">
+        <div class="highlight-ring">
+          <!-- TAG IMG SOROTAN 1 -->
+          <img 
+            src="LETAKKAN_URL_FOTO_SOROTAN_1.jpg" 
+            alt="Sorotan 1" 
+            class="h-full w-full rounded-full object-cover bg-neutral-100"
+          />
+        </div>
+        <span class="text-xs text-neutral-600">Sorotan 1</span>
+      </article>
+
+      <!-- Highlight 2 -->
+      <article class="flex flex-col items-center gap-2">
+        <div class="highlight-ring">
+          <!-- TAG IMG SOROTAN 2 -->
+          <img 
+            src="LETAKKAN_URL_FOTO_SOROTAN_2.jpg" 
+            alt="Sorotan 2" 
+            class="h-full w-full rounded-full object-cover bg-neutral-100"
+          />
+        </div>
+        <span class="text-xs text-neutral-600">Sorotan 2</span>
+      </article>
+
+      <!-- Tombol Tambah Baru -->
+      <article class="flex flex-col items-center gap-2">
+        <div class="highlight-ring text-2xl text-neutral-500">+</div>
+        <span class="text-xs text-neutral-600">Baru</span>
+      </article>
+
+    </section>
+
+    <!-- NAVIGASI TAB -->
+    <nav aria-label="Navigasi Konten Profil" class="flex justify-around border-t border-neutral-200 text-xs font-semibold tracking-widest uppercase">
+      
+      <!-- Tab 1: Kiriman / Grid -->
+      <a href="#" class="tab-item tab-active flex-1">
+        <!-- TAG IMG IKON GRID POSTING -->
+        <img 
+          src="post.png" 
+          alt="Kiriman" 
+          class="h-5 w-5 object-contain"
+        />
+      </a>
+
+      <!-- Tab 2: Tersimpan / Bookmark -->
+      <a href="#" class="tab-item flex-1">
+        <!-- TAG IMG IKON BOOKMARK -->
+        <img 
+          src="bookmark.png" 
+          alt="Tersimpan" 
+          class="h-5 w-5 object-contain"
+        />
+      </a>
+
+      <!-- Tab 3: Repost -->
+      <a href="#" class="tab-item flex-1">
+        <!-- TAG IMG IKON REPOST -->
+        <img 
+          src="repost.png" 
+          alt="Repost" 
+          class="h-5 w-5 object-contain"
+        />
+      </a>
+
+      <!-- Tab 4: Ditandai / Tagged -->
+      <a href="#" class="tab-item flex-1">
+        <!-- TAG IMG IKON TAGGED -->
+        <img 
+          src="tagged.png" 
+          alt="Ditandai" 
+          class="h-5 w-5 object-contain"
+        />
+      </a>
+
+    </nav>
+
+    <!-- GRID POSTINGAN -->
+    <section aria-label="Grid Posting" class="mt-4 grid grid-cols-3 gap-1 md:gap-4">
+      
+      <!-- Postingan 1 -->
+      <article class="aspect-square w-full overflow-hidden bg-neutral-100">
+        <!-- TAG IMG POSTINGAN 1 -->
+        <img 
+          src="LETAKKAN_URL_FOTO_POSTINGAN_1.jpg" 
+          alt="Post 1" 
+          class="h-full w-full object-cover"
+        />
+      </article>
+
+      <!-- Postingan 2 -->
+      <article class="aspect-square w-full overflow-hidden bg-neutral-100">
+        <!-- TAG IMG POSTINGAN 2 -->
+        <img 
+          src="LETAKKAN_URL_FOTO_POSTINGAN_2.jpg" 
+          alt="Post 2" 
+          class="h-full w-full object-cover"
+        />
+      </article>
+
+      <!-- Postingan 3 -->
+      <article class="aspect-square w-full overflow-hidden bg-neutral-100">
+        <!-- TAG IMG POSTINGAN 3 -->
+        <img 
+          src="LETAKKAN_URL_FOTO_POSTINGAN_3.jpg" 
+          alt="Post 3" 
+          class="h-full w-full object-cover"
+        />
+      </article>
+
+    </section>
+
+  </main>
+
+</body>
+</html>
