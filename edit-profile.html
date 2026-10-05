@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit profil • Instagram</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+    <style>
+
+      :root {
+        --bg: #ffffff;
+        --surface: #efefef;
+        --fg: #000000;
+        --muted: #737373;
+        --line: #dbdbdb;
+        --hover: #efefef;
+        --accent: #0095f6;
+        --accent-hover: #1877f2;
+        --switch-off: #c7c7c7;
+      }
+      :root[data-theme="dark"] {
+        --bg: #0c1014;
+        --surface: #1c2128;
+        --fg: #f5f5f5;
+        --muted: #a8a8a8;
+        --line: #2d333b;
+        --hover: #1c2128;
+        --accent: #4a5df9;
+        --accent-hover: #5b6cff;
+        --switch-off: #3a4048;
+      }
+
+      *, *::before, *::after { box-sizing: border-box; }
+      html, body { margin: 0; }
+      body {
+        min-height: 100vh;
+        background: var(--bg);
+        color: var(--fg);
+        font-family: "Public Sans", system-ui, sans-serif;
+        font-size: 16px;
+        line-height: 1.4;
+      }
+      button, input, select, textarea { font: inherit; color: inherit; }
+      button { background: none; border: 0; padding: 0; cursor: pointer; text-align: left; }
+      a { color: inherit; text-decoration: none; }
+      ul { list-style: none; margin: 0; padding: 0; }
+      h1, h2, p { margin: 0; }
+      :focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
+
+      .layout { display: grid; grid-template-columns: clamp(280px, 27vw, 440px) 1fr; min-height: 100vh; }
+
+      .side {
+        position: sticky; top: 0; height: 100vh; overflow-y: auto;
+        padding: 40px 20px 48px;
+        border-right: 1px solid var(--line);
+      }
+      .side-head { display: flex; align-items: center; gap: 12px; padding: 0 12px; margin-bottom: 28px; }
+      .side-title { font-size: 24px; font-weight: 700; }
+      .icon-btn {
+        display: flex; align-items: center; justify-content: center;
+        width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+      }
+      .icon-btn:hover { background: var(--hover); }
+
+      .search {
+        display: flex; align-items: center; gap: 12px;
+        height: 52px; padding: 0 18px; margin-bottom: 28px;
+        border-radius: 26px; background: var(--surface);
+      }
+      .search input { flex: 1; min-width: 0; border: 0; outline: 0; background: none; font-size: 16px; }
+      .search input::placeholder { color: var(--muted); }
+      .search:focus-within { outline: 2px solid var(--fg); outline-offset: 2px; }
+
+      .group { margin-bottom: 24px; }
+      .group-title { padding: 0 12px; margin-bottom: 10px; font-size: 13px; font-weight: 600; color: var(--muted); }
+      .item {
+        display: flex; align-items: center; gap: 14px; width: 100%;
+        min-height: 56px; padding: 8px 12px; border-radius: 12px;
+        font-size: 16px;
+      }
+      .item:hover { background: var(--hover); }
+      .item[aria-current="page"] { background: var(--hover); font-weight: 600; }
+      .item svg { flex-shrink: 0; }
+      .item small { display: block; margin-top: 2px; font-size: 14px; font-weight: 400; color: var(--muted); }
+      .item.meta { align-items: flex-start; }
+      .no-result { padding: 12px; color: var(--muted); }
+
+      .main { padding: 56px 32px 96px; }
+      .content { width: 100%; max-width: 762px; margin: 0 auto; }
+      .back-mobile { display: none; margin-bottom: 16px; }
+      .page-title { font-size: 24px; font-weight: 700; margin-bottom: 40px; }
+
+      .profile-card {
+        display: flex; align-items: center; justify-content: space-between; gap: 16px;
+        padding: 20px; border-radius: 24px; background: var(--surface);
+      }
+      .profile-info { display: flex; align-items: center; gap: 18px; min-width: 0; }
+      .avatar { width: 68px; height: 68px; border-radius: 50%; object-fit: cover; background: var(--line); flex-shrink: 0; }
+      .p-username { font-size: 18px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .p-name { color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+      .btn {
+        padding: 10px 20px; border-radius: 10px; flex-shrink: 0;
+        background: var(--accent); color: #fff; font-weight: 600; text-align: center;
+        transition: background .15s, opacity .15s;
+      }
+      .btn:hover { background: var(--accent-hover); }
+      .btn:disabled { opacity: .35; cursor: not-allowed; }
+      .btn:disabled:hover { background: var(--accent); }
+
+      .field { margin-top: 44px; }
+      .label { display: block; margin-bottom: 16px; font-size: 18px; font-weight: 700; }
+      .hint { margin-top: 12px; font-size: 14px; color: var(--muted); }
+
+      .input {
+        display: block; width: 100%; height: 52px; padding: 0 20px;
+        border: 0; border-radius: 16px; background: var(--surface);
+        font-size: 17px; outline: 0;
+      }
+      .input::placeholder { color: var(--muted); }
+      .input:disabled { cursor: not-allowed; }
+      .input:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
+
+      .select-wrap { position: relative; }
+      .select-wrap select { appearance: none; -webkit-appearance: none; padding-right: 48px; cursor: pointer; }
+      .select-wrap svg { position: absolute; right: 18px; top: 50%; transform: translateY(-50%); pointer-events: none; }
+
+      .bio-box {
+        position: relative; border: 1px solid var(--line); border-radius: 16px;
+      }
+      .bio-box:focus-within { border-color: var(--fg); }
+      .bio-box textarea {
+        display: block; width: 100%; height: 100px; padding: 16px 20px 34px;
+        border: 0; outline: 0; background: none; resize: none; font-size: 16px;
+      }
+      .bio-box textarea::placeholder { color: var(--muted); }
+      .bio-count { position: absolute; right: 18px; bottom: 10px; font-size: 14px; color: var(--muted); pointer-events: none; }
+
+      .row {
+        display: flex; align-items: center; justify-content: space-between; gap: 20px;
+        min-height: 76px; padding: 16px 20px;
+        border: 1px solid var(--line); border-radius: 20px;
+      }
+      .row-title { font-size: 17px; }
+      .row-desc { margin-top: 4px; font-size: 14px; color: var(--muted); }
+
+      .switch {
+        position: relative; width: 52px; height: 32px; flex-shrink: 0;
+        border-radius: 16px; background: var(--switch-off); transition: background .2s;
+      }
+      .switch::after {
+        content: ""; position: absolute; top: 3px; left: 3px;
+        width: 26px; height: 26px; border-radius: 50%; background: #fff;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, .3); transition: transform .2s;
+      }
+      .switch[aria-checked="true"] { background: var(--fg); }
+      .switch[aria-checked="true"]::after { transform: translateX(20px); background: var(--bg); box-shadow: none; }
+
+      .actions { display: flex; justify-content: flex-end; margin-top: 48px; }
+      .actions .btn { min-width: 160px; padding: 12px 28px; }
+
+      .section-title { margin: 40px 0 16px; font-size: 18px; font-weight: 700; }
+      .stack > .section-title:first-child { margin-top: 0; }
+      .desc { margin: 0 0 16px; font-size: 14px; line-height: 1.5; color: var(--muted); }
+      .row + .row { margin-top: 12px; }
+      .card { display: block; border: 1px solid var(--line); border-radius: 20px; overflow: hidden; }
+      .card + .card { margin-top: 12px; }
+      .crow {
+        display: flex; align-items: center; justify-content: space-between; gap: 16px;
+        width: 100%; min-height: 60px; padding: 14px 20px; cursor: pointer;
+      }
+      .crow + .crow { border-top: 1px solid var(--line); }
+      .crow:hover { background: var(--hover); }
+      .crow svg { flex-shrink: 0; color: var(--muted); }
+
+      .radio, .check {
+        appearance: none; -webkit-appearance: none; margin: 0; flex-shrink: 0;
+        display: grid; place-content: center; width: 22px; height: 22px;
+        border: 2px solid var(--muted); cursor: pointer;
+      }
+      .radio { border-radius: 50%; }
+      .radio:checked { border-color: var(--fg); }
+      .radio:checked::after { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--fg); }
+      .check { border-radius: 6px; }
+      .check:checked { border-color: var(--fg); background: var(--fg); }
+      .check:checked::after {
+        content: ""; width: 6px; height: 11px; margin-top: -2px;
+        border: solid var(--bg); border-width: 0 2px 2px 0; transform: rotate(45deg);
+      }
+
+      .person { display: flex; align-items: center; gap: 14px; padding: 12px 20px; }
+      .person + .person { border-top: 1px solid var(--line); }
+      label.person { cursor: pointer; }
+      .person[hidden] { display: none; }
+      .pavatar {
+        display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        width: 44px; height: 44px; border-radius: 50%; color: #fff; font-weight: 700;
+      }
+      .pname { min-width: 0; }
+      .pname strong { display: block; }
+      .pname small { display: block; color: var(--muted); font-size: 14px; }
+      .p-right { margin-left: auto; }
+      .btn-ghost {
+        padding: 8px 16px; border-radius: 10px; background: var(--surface);
+        font-size: 14px; font-weight: 600; text-align: center;
+      }
+      .btn-ghost:hover { background: var(--line); }
+
+      .people-search { margin-bottom: 16px; height: 46px; }
+      .textarea {
+        display: block; width: 100%; height: 130px; padding: 16px 20px;
+        border: 1px solid var(--line); border-radius: 16px; background: none;
+        font-size: 16px; resize: none; outline: 0;
+      }
+      .textarea:focus { border-color: var(--fg); }
+      .textarea::placeholder { color: var(--muted); }
+
+      .empty-state { padding: 56px 16px; text-align: center; color: var(--muted); }
+      .empty-state strong { display: block; margin-bottom: 6px; font-size: 18px; color: var(--fg); }
+      .status { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 48px 16px; text-align: center; }
+      .status-icon {
+        display: flex; align-items: center; justify-content: center;
+        width: 72px; height: 72px; border-radius: 50%; background: #2ea44f; color: #fff;
+      }
+      .status strong { font-size: 20px; }
+      .status p { max-width: 420px; color: var(--muted); }
+
+      .mobile-nav { display: none; margin-bottom: 16px; }
+      .reduce-motion *, .reduce-motion *::before, .reduce-motion *::after { transition: none !important; animation: none !important; }
+
+      .toast {
+        position: fixed; left: 50%; bottom: 24px; z-index: 50;
+        transform: translate(-50%, 16px); opacity: 0; pointer-events: none;
+        padding: 12px 18px; border-radius: 8px; max-width: 90vw;
+        background: var(--fg); color: var(--bg);
+        transition: opacity .2s, transform .2s;
+      }
+      .toast.show { opacity: 1; transform: translate(-50%, 0); }
+      @media (prefers-reduced-motion: reduce) {
+        .toast, .switch, .switch::after, .btn { transition: none; }
+      }
+
+      @media (max-width: 900px) {
+        .layout { grid-template-columns: 1fr; }
+        .side { display: none; }
+        .main { padding: 24px 16px 80px; }
+        .back-mobile { display: flex; }
+        .mobile-nav { display: block; }
+        .page-title { margin-bottom: 24px; }
+        .profile-card { padding: 16px; }
+      }
+    </style>
+</head>
+<body>
+
+  <div class="layout">
+
+    <aside class="side" aria-label="Pengaturan">
+      <div class="side-head">
+        <a href="index.html" class="icon-btn" aria-label="Kembali ke profil">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12H4M10 6l-6 6 6 6"/></svg>
+        </a>
+        <h2 class="side-title">Pengaturan</h2>
+      </div>
+
+      <label class="search">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.500-3.500"/></svg>
+        <input id="menu-search" type="search" placeholder="Cari" autocomplete="off" aria-label="Cari pengaturan" />
+      </label>
+
+      <nav id="menu" aria-label="Menu pengaturan"></nav>
+      <p id="no-result" class="no-result" hidden>Tidak ada pengaturan yang cocok.</p>
+    </aside>
+
+    <main class="main">
+      <div class="content">
+
+        <a href="index.html" class="icon-btn back-mobile" aria-label="Kembali ke profil">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12H4M10 6l-6 6 6 6"/></svg>
+        </a>
+
+        <div class="select-wrap mobile-nav">
+          <select id="mobile-nav" class="input" aria-label="Pilih pengaturan"></select>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        </div>
+
+        <h1 id="page-title" class="page-title">Edit profil</h1>
+
+        <div id="page-other" class="stack" hidden></div>
+
+        <div id="page-edit">
+        <form id="edit-form" novalidate>
+
+          <section class="profile-card">
+            <div class="profile-info">
+              <img id="avatar" class="avatar" src="profile.jpg" alt="Foto profil" />
+              <div style="min-width:0">
+                <p id="p-username" class="p-username">Monck_n_key</p>
+                <p id="p-name" class="p-name">momonk</p>
+              </div>
+            </div>
+            <button type="button" id="photo-btn" class="btn">Ubah foto</button>
+            <input type="file" id="photo-input" accept="image/*" hidden />
+          </section>
+
+          <div class="field">
+            <label class="label" for="website">Situs web</label>
+            <input id="website" class="input" type="text" placeholder="Situs web" disabled />
+            <p class="hint">Mengedit tautanmu hanya tersedia di ponsel. Buka aplikasi Instagram dan edit profilmu untuk mengubah situs web di bio.</p>
+          </div>
+
+          <div class="field">
+            <label class="label" for="bio">Bio</label>
+            <div class="bio-box">
+              <textarea id="bio" maxlength="150" placeholder="Tulis bio kamu"></textarea>
+              <span id="bio-count" class="bio-count">0 / 150</span>
+            </div>
+          </div>
+
+          <div class="field">
+            <h2 class="label" id="threads-label">Tampilkan lencana Threads</h2>
+            <div class="row">
+              <span class="row-title">Tampilkan lencana Threads</span>
+              <button type="button" role="switch" id="threads" class="switch" aria-checked="true" aria-labelledby="threads-label"></button>
+            </div>
+          </div>
+
+          <div class="field">
+            <h2 class="label" id="ai-label">Profil buatan AI</h2>
+            <div class="row">
+              <div>
+                <p class="row-title">Profil buatan AI</p>
+                <p class="row-desc">Tampilkan label jika foto atau bio profilmu dibuat atau diubah memakai AI.</p>
+              </div>
+              <button type="button" role="switch" id="ai" class="switch" aria-checked="false" aria-labelledby="ai-label"></button>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label" for="gender">Gender</label>
+            <div class="select-wrap">
+              <select id="gender" class="input">
+                <option value="">Pilih gender</option>
+                <option value="Perempuan">Perempuan</option>
+                <option value="Laki-laki">Laki-laki</option>
+                <option value="Kustom">Kustom</option>
+                <option value="Tidak ingin menyebutkan">Pilih tidak menyebutkan</option>
+              </select>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+            </div>
+            <p class="hint">Ini tidak akan menjadi bagian dari profil publikmu.</p>
+          </div>
+
+          <div class="field">
+            <h2 class="label" id="suggest-label">Tampilkan saran akun di profil</h2>
+            <div class="row">
+              <div>
+                <p class="row-title">Tampilkan saran akun di profil</p>
+                <p class="row-desc">Pilih apakah orang bisa melihat saran akun serupa di profilmu, dan apakah akunmu bisa disarankan di profil lain.</p>
+              </div>
+              <button type="button" role="switch" id="suggest" class="switch" aria-checked="true" aria-labelledby="suggest-label"></button>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button type="submit" id="submit-btn" class="btn" disabled>Kirim</button>
+          </div>
+
+        </form>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script>
+
+    const ICONS = {
+      meta: '<path d="M12 12c-2-2.700-3.500-4.500-6-4.500a4.500 4.500 0 0 0 0 9c2.500 0 4-1.800 6-4.500zm0 0c2 2.700 3.500 4.500 6 4.500a4.500 4.500 0 0 0 0-9c-2.500 0-4 1.800-6 4.500z"/>',
+      user: '<circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/>',
+      bell: '<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.300 21a1.940 1.940 0 0 0 3.400 0"/>',
+      lock: '<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+      star: '<circle cx="12" cy="12" r="10"/><path d="m12 7 1.500 3.200 3.500.4-2.600 2.400.7 3.500L12 14.700 8.900 16.500l.7-3.500L7 10.600l3.500-.4z"/>',
+      ban: '<circle cx="12" cy="12" r="10"/><path d="m4.900 4.900 14.200 14.200"/>',
+      pinoff: '<path d="M12 22s7-7 7-12a7 7 0 0 0-14 0c0 5 7 12 7 12z"/><circle cx="12" cy="10" r="2.500"/><path d="M3 3l18 18"/>',
+      chat: '<path d="M21 11.500a8.400 8.400 0 0 1-9 8.400 8.500 8.500 0 0 1-3.800-.9L3 21l1.900-5.100A8.400 8.400 0 1 1 21 11.500z"/>',
+      at: '<circle cx="12" cy="12" r="4"/><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-4 8"/>',
+      comment: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+      repeat: '<path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/>',
+      restrict: '<circle cx="9" cy="8" r="4"/><path d="M2 21v-1a6 6 0 0 1 6-6h2"/><path d="m17 14 5 5m0-5-5 5"/>',
+      words: '<path d="M4 7V5h16v2"/><path d="M12 5v14"/><path d="M9 19h6"/>',
+      mute: '<path d="M11 5 6 9H2v6h4l5 4z"/><path d="m22 9-6 6m0-6 6 6"/>',
+      sliders: '<path d="M4 6h8M18 6h2M4 12h2M12 12h8M4 18h10M20 18h0"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/>',
+      heart: '<path d="M20.800 5.600a5.500 5.500 0 0 0-7.800 0L12 6.700l-1-1.100a5.500 5.500 0 0 0-7.800 7.800L12 22l8.800-8.600a5.500 5.500 0 0 0 0-7.800z"/>',
+      download: '<path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/>',
+      access: '<circle cx="12" cy="4.500" r="1.800"/><path d="M5 8h14M12 8v6m0 0-3 7m3-7 3 7"/>',
+      globe: '<circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/>',
+      window: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/>',
+      help: '<circle cx="12" cy="12" r="10"/><path d="M9.500 9a2.500 2.500 0 1 1 3.500 2.300c-.7.400-1 .9-1 1.700"/><path d="M12 17h.01"/>',
+      shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+      info: '<circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/>'
+    };
+
+    const MENU = [
+      { title: 'Akunmu', items: [
+        { id: 'meta', icon: 'meta', label: 'Akun Meta', desc: 'Kata sandi, keamanan, detail pribadi, pengalaman lintas profil, preferensi iklan', href: 'https://accountscenter.instagram.com/' }
+      ]},
+      { title: 'Cara kamu menggunakan Instagram', items: [
+        { id: 'edit', icon: 'user', label: 'Edit profil' },
+        { id: 'notifikasi', icon: 'bell', label: 'Notifikasi' }
+      ]},
+      { title: 'Siapa yang bisa melihat kontenmu', items: [
+        { id: 'privasi', icon: 'lock', label: 'Privasi akun' },
+        { id: 'temandekat', icon: 'star', label: 'Teman Dekat' },
+        { id: 'diblokir', icon: 'ban', label: 'Diblokir' },
+        { id: 'cerita', icon: 'pinoff', label: 'Cerita, live, dan lokasi' }
+      ]},
+      { title: 'Cara orang lain berinteraksi denganmu', items: [
+        { id: 'pesan', icon: 'chat', label: 'Pesan dan balasan cerita' },
+        { id: 'tag', icon: 'at', label: 'Tag dan sebutan' },
+        { id: 'komentar', icon: 'comment', label: 'Komentar' },
+        { id: 'berbagi', icon: 'repeat', label: 'Berbagi dan repost' },
+        { id: 'dibatasi', icon: 'restrict', label: 'Akun dibatasi' },
+        { id: 'katatersembunyi', icon: 'words', label: 'Kata Tersembunyi' }
+      ]},
+      { title: 'Yang kamu lihat', items: [
+        { id: 'dibisukan', icon: 'mute', label: 'Akun dibisukan' },
+        { id: 'preferensi', icon: 'sliders', label: 'Preferensi konten' },
+        { id: 'suka', icon: 'heart', label: 'Jumlah suka dan bagikan' }
+      ]},
+      { title: 'Aplikasi dan media kamu', items: [
+        { id: 'arsip', icon: 'download', label: 'Pengarsipan dan pengunduhan' },
+        { id: 'aksesibilitas', icon: 'access', label: 'Aksesibilitas' },
+        { id: 'bahasa', icon: 'globe', label: 'Bahasa' },
+        { id: 'izin', icon: 'window', label: 'Izin situs web' }
+      ]},
+      { title: 'Info lainnya dan dukungan', items: [
+        { id: 'bantuan', icon: 'help', label: 'Bantuan', href: 'https://help.instagram.com/' },
+        { id: 'pusatprivasi', icon: 'shield', label: 'Pusat Privasi', href: 'https://privacycenter.instagram.com/' },
+        { id: 'status', icon: 'info', label: 'Status akun' }
+      ]}
+    ];
+
+    const SAME3 = [
+      { v: 'all', l: 'Semua orang' },
+      { v: 'follow', l: 'Orang yang kamu ikuti' },
+      { v: 'none', l: 'Tidak ada' }
+    ];
+
+    const PEOPLE = {
+      rina:     { u: 'rina.putri',       n: 'Rina Putri',        c: '#e1306c' },
+      dimas:    { u: 'dimas_p',          n: 'Dimas Pratama',     c: '#5851db' },
+      sarah:    { u: 'sarah.k',          n: 'Sarah Kusuma',      c: '#f77737' },
+      budi:     { u: 'budi.santoso',     n: 'Budi Santoso',      c: '#2ea44f' },
+      ayu:      { u: 'ayu.lestari',      n: 'Ayu Lestari',       c: '#0095f6' },
+      spam:     { u: 'akun_spam01',      n: 'Akun Spam',         c: '#737373' },
+      promo:    { u: 'promo_murah99',    n: 'Promo Murah',       c: '#8a3ab9' },
+      kating:   { u: 'kating.sok_asik',  n: 'Kating Sok Asik',   c: '#c13584' },
+      info:     { u: 'info_kampus_ofc',  n: 'Info Kampus',       c: '#0e7490' },
+      giveaway: { u: 'giveaway.hunter',  n: 'Giveaway Hunter',   c: '#b45309' }
+    };
+
+    const PAGES = {
+      notifikasi: [
+        { t: 'toggle', key: 'notifPause', label: 'Jeda semua', desc: 'Jeda sementara semua notifikasi push.', def: false },
+        { t: 'heading', text: 'Notifikasi push' },
+        { t: 'toggle', key: 'nSuka', label: 'Suka', def: true },
+        { t: 'toggle', key: 'nKomentar', label: 'Komentar', def: true },
+        { t: 'toggle', key: 'nPengikut', label: 'Pengikut dan pengikut baru', def: true },
+        { t: 'toggle', key: 'nPesan', label: 'Pesan', def: true },
+        { t: 'heading', text: 'Notifikasi email' },
+        { t: 'toggle', key: 'eUmpanBalik', label: 'Email umpan balik', desc: 'Berikan masukan tentang Instagram.', def: true },
+        { t: 'toggle', key: 'ePengingat', label: 'Email pengingat', desc: 'Dapatkan notifikasi yang mungkin terlewat.', def: true },
+        { t: 'toggle', key: 'eProduk', label: 'Email produk', desc: 'Dapatkan tips dan fitur baru dari Instagram.', def: false },
+        { t: 'toggle', key: 'eBerita', label: 'Email berita', desc: 'Dapatkan berita terbaru dari Instagram.', def: false },
+        { t: 'toggle', key: 'eDukungan', label: 'Email dukungan', desc: 'Dapatkan pembaruan tentang permintaan dukunganmu.', def: true }
+      ],
+      privasi: [
+        { t: 'toggle', key: 'private', label: 'Akun privat', def: false,
+          desc: 'Saat akunmu publik, profil dan kirimanmu bisa dilihat siapa saja, di dalam maupun di luar Instagram, bahkan oleh orang yang tidak punya akun Instagram. Saat akunmu privat, hanya pengikut yang kamu setujui yang bisa melihat apa yang kamu bagikan, termasuk foto atau video di tagar dan halaman lokasi, serta daftar pengikut dan yang kamu ikuti.' }
+      ],
+      temandekat: [
+        { t: 'text', html: 'Kami tidak memberi tahu siapa pun saat kamu mengedit daftar Teman Dekat. Kamu bisa membagikan cerita hanya ke orang-orang di daftar ini.' },
+        { t: 'search' },
+        { t: 'people', key: 'cf', mode: 'check', ids: ['rina', 'dimas', 'sarah', 'budi', 'ayu'] },
+        { t: 'count' }
+      ],
+      diblokir: [
+        { t: 'text', html: 'Kamu bisa memblokir orang kapan saja dari profil mereka. Orang yang diblokir tidak bisa melihat profil, cerita, atau kirimanmu.' },
+        { t: 'people', key: 'blocked', mode: 'remove', ids: ['spam', 'promo'], action: 'Buka blokir',
+          emptyTitle: 'Belum ada akun yang diblokir', emptyText: 'Akun yang kamu blokir akan muncul di sini.' }
+      ],
+      cerita: [
+        { t: 'heading', text: 'Balasan cerita' },
+        { t: 'radio', key: 'storyReply', def: 'all', label: 'Izinkan balasan cerita dari', options: [
+          { v: 'all', l: 'Semua orang' }, { v: 'follow', l: 'Orang yang kamu ikuti' }, { v: 'off', l: 'Nonaktifkan balasan pesan' } ] },
+        { t: 'heading', text: 'Berbagi' },
+        { t: 'toggle', key: 'storyShareDM', label: 'Izinkan berbagi ke pesan', desc: 'Biarkan orang membagikan ceritamu lewat pesan.', def: true },
+        { t: 'toggle', key: 'storyFB', label: 'Bagikan ceritamu ke Facebook', def: false },
+        { t: 'toggle', key: 'storyGallery', label: 'Simpan cerita ke galeri', def: false },
+        { t: 'heading', text: 'Lokasi' },
+        { t: 'toggle', key: 'location', label: 'Gunakan layanan lokasi', desc: 'Izinkan Instagram memakai lokasimu untuk saran dan stiker lokasi.', def: false }
+      ],
+      pesan: [
+        { t: 'heading', text: 'Siapa yang bisa mengirim pesan kepadamu' },
+        { t: 'radio', key: 'dmWho', def: 'all', label: 'Siapa yang bisa mengirim pesan', options: SAME3 },
+        { t: 'heading', text: 'Aktivitas' },
+        { t: 'toggle', key: 'activity', label: 'Tampilkan status aktivitas', desc: 'Izinkan akun yang kamu ikuti dan siapa pun yang kamu kirimi pesan untuk melihat kapan kamu terakhir aktif.', def: true },
+        { t: 'toggle', key: 'readReceipt', label: 'Tampilkan tanda sudah dibaca', desc: 'Beri tahu orang lain saat kamu sudah membaca pesan mereka.', def: true }
+      ],
+      tag: [
+        { t: 'heading', text: 'Izinkan tag dari' },
+        { t: 'radio', key: 'tagWho', def: 'all', label: 'Izinkan tag dari', options: SAME3 },
+        { t: 'heading', text: 'Izinkan sebutan dari' },
+        { t: 'radio', key: 'mentionWho', def: 'all', label: 'Izinkan sebutan dari', options: SAME3 },
+        { t: 'heading', text: 'Persetujuan' },
+        { t: 'toggle', key: 'tagManual', label: 'Setujui tag secara manual', desc: 'Pilih apakah kamu ingin meninjau tag sebelum muncul di profilmu.', def: false }
+      ],
+      komentar: [
+        { t: 'heading', text: 'Izinkan komentar dari' },
+        { t: 'radio', key: 'commentWho', def: 'all', label: 'Izinkan komentar dari', options: [
+          { v: 'all', l: 'Semua orang' }, { v: 'followers', l: 'Pengikutmu' },
+          { v: 'follow', l: 'Orang yang kamu ikuti' }, { v: 'both', l: 'Orang yang kamu ikuti dan pengikutmu' } ] },
+        { t: 'heading', text: 'Filter' },
+        { t: 'toggle', key: 'cOffensive', label: 'Sembunyikan komentar yang menyinggung', def: true },
+        { t: 'toggle', key: 'cManual', label: 'Filter komentar manual', desc: 'Sembunyikan komentar yang mengandung kata tertentu dari Kata Tersembunyi.', def: false },
+        { t: 'toggle', key: 'cGif', label: 'Izinkan GIF di komentar', def: true }
+      ],
+      berbagi: [
+        { t: 'toggle', key: 'shareStory', label: 'Izinkan berbagi kiriman ke cerita', desc: 'Biarkan orang membagikan kiriman dan reel-mu ke cerita mereka.', def: true },
+        { t: 'toggle', key: 'repost', label: 'Izinkan repost kontenmu', desc: 'Biarkan orang me-repost kiriman dan reel-mu ke profil mereka.', def: true },
+        { t: 'toggle', key: 'embed', label: 'Izinkan orang menyematkan kirimanmu', desc: 'Kirimanmu bisa ditampilkan di situs web lain.', def: true },
+        { t: 'toggle', key: 'shareDM', label: 'Izinkan berbagi lewat pesan', def: true }
+      ],
+      dibatasi: [
+        { t: 'text', html: 'Batasi akun secara diam-diam untuk melindungi dirimu dari perundungan tanpa harus memblokir atau berhenti mengikuti mereka. Komentar dari akun yang dibatasi hanya terlihat oleh mereka sendiri.' },
+        { t: 'people', key: 'restricted', mode: 'remove', ids: ['kating'], action: 'Hapus batasan',
+          emptyTitle: 'Belum ada akun yang dibatasi', emptyText: 'Akun yang kamu batasi akan muncul di sini.' }
+      ],
+      katatersembunyi: [
+        { t: 'toggle', key: 'hwComment', label: 'Sembunyikan komentar yang menyinggung', desc: 'Sembunyikan komentar yang mungkin menyinggung dari kiriman, cerita, dan live-mu.', def: true },
+        { t: 'toggle', key: 'hwDM', label: 'Sembunyikan permintaan pesan yang menyinggung', desc: 'Pindahkan permintaan pesan yang mungkin menyinggung ke folder terpisah.', def: true },
+        { t: 'toggle', key: 'hwAdvanced', label: 'Sembunyikan komentar lanjutan', desc: 'Sembunyikan komentar yang mungkin spam atau tidak relevan.', def: false },
+        { t: 'heading', text: 'Kata, frasa, atau emoji kustom' },
+        { t: 'textarea', key: 'hwCustom', placeholder: 'Tulis kata, frasa, atau emoji dipisah koma' },
+        { t: 'text', html: 'Komentar dan permintaan pesan yang mengandung kata-kata ini akan disembunyikan.' }
+      ],
+      dibisukan: [
+        { t: 'text', html: 'Akun yang dibisukan tidak akan tahu bahwa kamu membisukan mereka. Kamu masih bisa mengunjungi profil mereka kapan saja.' },
+        { t: 'people', key: 'muted', mode: 'remove', ids: ['info', 'giveaway'], action: 'Berhenti membisukan',
+          emptyTitle: 'Belum ada akun yang dibisukan', emptyText: 'Akun yang kamu bisukan akan muncul di sini.' }
+      ],
+      preferensi: [
+        { t: 'heading', text: 'Kontrol konten sensitif' },
+        { t: 'radio', key: 'sensitive', def: 'standard', label: 'Kontrol konten sensitif', options: [
+          { v: 'less', l: 'Lebih sedikit' }, { v: 'standard', l: 'Standar' } ] },
+        { t: 'heading', text: 'Saran' },
+        { t: 'toggle', key: 'snooze', label: 'Tunda saran kiriman di feed', desc: 'Sembunyikan sementara kiriman yang disarankan selama 30 hari.', def: false }
+      ],
+      suka: [
+        { t: 'toggle', key: 'hideLikes', label: 'Sembunyikan jumlah suka dan tayangan', def: false,
+          desc: 'Hanya kamu yang akan melihat jumlah total suka dan tayangan di kirimanmu. Kamu masih bisa melihat siapa saja yang menyukainya dari kiriman itu.' }
+      ],
+      arsip: [
+        { t: 'heading', text: 'Pengarsipan' },
+        { t: 'toggle', key: 'saveStory', label: 'Simpan cerita ke arsip', desc: 'Cerita yang sudah berakhir otomatis disimpan di arsipmu agar tidak perlu menyimpannya satu per satu.', def: true },
+        { t: 'toggle', key: 'saveLive', label: 'Simpan live ke arsip', def: true },
+        { t: 'heading', text: 'Lihat dan unduh' },
+        { t: 'link', label: 'Lihat arsip', href: 'archive.html' },
+        { t: 'link', label: 'Unduh informasimu', href: 'https://accountscenter.instagram.com/', external: true }
+      ],
+      aksesibilitas: [
+        { t: 'toggle', key: 'autoplay', label: 'Putar video otomatis', desc: 'Putar video secara otomatis saat kamu menggulir.', def: true },
+        { t: 'toggle', key: 'reduceMotion', label: 'Kurangi gerakan', desc: 'Matikan animasi dan transisi di halaman ini.', def: false },
+        { t: 'toggle', key: 'autoAlt', label: 'Teks alternatif otomatis', desc: 'Buat deskripsi gambar otomatis untuk pembaca layar.', def: true }
+      ],
+      bahasa: [
+        { t: 'radio', key: 'lang', def: 'id', label: 'Bahasa', options: [
+          { v: 'id', l: 'Bahasa Indonesia' }, { v: 'en', l: 'English' }, { v: 'ms', l: 'Bahasa Melayu' },
+          { v: 'jv', l: 'Basa Jawa' }, { v: 'ja', l: '日本語' }, { v: 'ko', l: '한국어' } ] }
+      ],
+      izin: [
+        { t: 'heading', text: 'Aplikasi dan situs web' },
+        { t: 'text', html: 'Aplikasi dan situs web yang kamu hubungkan ke akun Instagram akan muncul di sini.' },
+        { t: 'empty', title: 'Belum ada yang terhubung', text: 'Kamu belum memberi izin ke aplikasi atau situs web mana pun.' },
+        { t: 'heading', text: 'Cookie' },
+        { t: 'toggle', key: 'cookies', label: 'Izinkan cookie opsional', desc: 'Bantu kami menyesuaikan pengalamanmu dan menampilkan konten yang lebih relevan.', def: true }
+      ],
+      status: [ { t: 'status' } ]
+    };
+
+    const SETTINGS_KEY = 'ig_settings';
+    let settings = (() => { try { return JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}'); } catch (e) { return {}; } })();
+    const getS = (key, def) => (key in settings ? settings[key] : def);
+    function setS(key, value) {
+      settings[key] = value;
+      try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch (e) {}
+      if (key === 'reduceMotion') applyEffects();
+    }
+    function applyEffects() { document.documentElement.classList.toggle('reduce-motion', !!getS('reduceMotion', false)); }
+
+    const PEOPLE_BLOCKS = {};
+    Object.values(PAGES).flat().forEach((b) => { if (b.t === 'people') PEOPLE_BLOCKS[b.key] = b; });
+    const peopleList = (b) => getS('p:' + b.key, b.mode === 'check' ? [] : b.ids);
+
+    const CHEVRON = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>';
+
+    function emptyHTML(title, text) { return `<div class="empty-state"><strong>${title}</strong>${text}</div>`; }
+
+    function personRow(id, right, tag) {
+      const p = PEOPLE[id];
+      return `<${tag} class="person" data-search="${(p.u + ' ' + p.n).toLowerCase()}">
+        <span class="pavatar" style="background:${p.c}" aria-hidden="true">${p.u[0].toUpperCase()}</span>
+        <span class="pname"><strong>${p.u}</strong><small>${p.n}</small></span>
+        <span class="p-right">${right}</span>
+      </${tag}>`;
+    }
+
+    function peopleHTML(b) {
+      const list = peopleList(b);
+      if (b.mode === 'remove') {
+        if (!list.length) return emptyHTML(b.emptyTitle, b.emptyText);
+        return `<div class="card">${list.map((id) => personRow(id,
+          `<button type="button" class="btn-ghost" data-remove="${b.key}" data-id="${id}">${b.action}</button>`, 'div')).join('')}</div>`;
+      }
+      return `<div class="card">${b.ids.map((id) => personRow(id,
+        `<input type="checkbox" class="check" data-person="${b.key}" data-id="${id}" ${list.includes(id) ? 'checked' : ''} aria-label="Pilih ${PEOPLE[id].u}">`, 'label')).join('')}</div>`;
+    }
+
+    function blockHTML(b) {
+      switch (b.t) {
+        case 'heading': return `<h2 class="section-title">${b.text}</h2>`;
+        case 'text': return `<p class="desc">${b.html}</p>`;
+        case 'toggle': return `
+          <div class="row">
+            <div>
+              <p class="row-title">${b.label}</p>
+              ${b.desc ? `<p class="row-desc">${b.desc}</p>` : ''}
+            </div>
+            <button type="button" role="switch" class="switch" data-key="${b.key}" aria-checked="${getS(b.key, b.def)}" aria-label="${b.label}"></button>
+          </div>`;
+        case 'radio': {
+          const cur = getS(b.key, b.def);
+          return `<div class="card" role="radiogroup" aria-label="${b.label}">${b.options.map((o) => `
+            <label class="crow"><span>${o.l}</span>
+              <input type="radio" class="radio" name="${b.key}" value="${o.v}" data-key="${b.key}" ${cur === o.v ? 'checked' : ''}>
+            </label>`).join('')}</div>`;
+        }
+        case 'link': return `<a class="card crow" href="${b.href}" ${b.external ? 'target="_blank" rel="noopener noreferrer"' : ''}><span>${b.label}</span>${CHEVRON}</a>`;
+        case 'textarea': return `<textarea class="textarea" data-key="${b.key}" placeholder="${b.placeholder}" aria-label="${b.placeholder}">${getS(b.key, '')}</textarea>`;
+        case 'search': return `<input type="search" class="input people-search" placeholder="Cari" aria-label="Cari orang" autocomplete="off">`;
+        case 'people': return `<div data-people="${b.key}">${peopleHTML(b)}</div>`;
+        case 'count': return `<p id="cf-count" class="desc" style="margin-top:16px">${getS('p:cf', []).length} teman dekat</p>`;
+        case 'empty': return emptyHTML(b.title, b.text);
+        case 'status': return `
+          <div class="status">
+            <span class="status-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.500 4.500 4.500L19 7.500"/></svg></span>
+            <strong>Akunmu dalam kondisi baik</strong>
+            <p>Tidak ada pelanggaran atau pembatasan pada akunmu. Terus ikuti Pedoman Komunitas agar akunmu tetap aman.</p>
+          </div>`;
+      }
+      return '';
+    }
+
+    const $ = (id) => document.getElementById(id);
+    const INTERNAL = MENU.flatMap((g) => g.items).filter((it) => !it.href);
+    const LABELS = Object.fromEntries(INTERNAL.map((it) => [it.id, it.label]));
+    let current = 'edit';
+
+    function renderMenu(query = '') {
+      const q = query.trim().toLowerCase();
+      let total = 0;
+      $('menu').innerHTML = MENU.map((g) => {
+        const items = g.items.filter((it) => !q || it.label.toLowerCase().includes(q) || (it.desc || '').toLowerCase().includes(q));
+        if (!items.length) return '';
+        total += items.length;
+        return `
+          <section class="group">
+            <h3 class="group-title" style="margin-top:0;margin-bottom:10px">${g.title}</h3>
+            <ul>
+              ${items.map((it) => {
+                const inner = `
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[it.icon]}</svg>
+                    <span>${it.label}${it.desc ? `<small>${it.desc}</small>` : ''}</span>`;
+                const cls = `item ${it.desc ? 'meta' : ''}`;
+                return it.href
+                  ? `<li><a class="${cls}" href="${it.href}" target="_blank" rel="noopener noreferrer">${inner}</a></li>`
+                  : `<li><button type="button" class="${cls}" data-page="${it.id}" ${it.id === current ? 'aria-current="page"' : ''}>${inner}</button></li>`;
+              }).join('')}
+            </ul>
+          </section>`;
+      }).join('');
+      $('no-result').hidden = total > 0;
+    }
+
+    function go(id) {
+      if (!LABELS[id]) id = 'edit';
+      current = id;
+      const isEdit = id === 'edit';
+      $('page-title').textContent = LABELS[id];
+      $('page-edit').hidden = !isEdit;
+      $('page-other').hidden = isEdit;
+      $('page-other').innerHTML = isEdit ? '' : PAGES[id].map(blockHTML).join('');
+      $('mobile-nav').value = id;
+      document.title = LABELS[id] + ' • Instagram';
+      renderMenu($('menu-search').value);
+    }
+
+    $('mobile-nav').innerHTML = INTERNAL.map((it) => `<option value="${it.id}">${it.label}</option>`).join('');
+    $('mobile-nav').addEventListener('change', (e) => { location.hash = e.target.value; });
+    $('menu-search').addEventListener('input', (e) => renderMenu(e.target.value));
+    $('menu').addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-page]');
+      if (btn && btn.dataset.page !== current) location.hash = btn.dataset.page;
+    });
+    window.addEventListener('hashchange', () => go(location.hash.slice(1)));
+
+    const other = $('page-other');
+
+    other.addEventListener('click', (e) => {
+      const sw = e.target.closest('.switch[data-key]');
+      if (sw) {
+        const on = sw.getAttribute('aria-checked') !== 'true';
+        sw.setAttribute('aria-checked', String(on));
+        setS(sw.dataset.key, on);
+        return;
+      }
+      const rm = e.target.closest('button[data-remove]');
+      if (rm) {
+        const b = PEOPLE_BLOCKS[rm.dataset.remove];
+        setS('p:' + b.key, peopleList(b).filter((x) => x !== rm.dataset.id));
+        other.querySelector(`[data-people="${b.key}"]`).innerHTML = peopleHTML(b);
+      }
+    });
+
+    other.addEventListener('change', (e) => {
+      const el = e.target;
+      if (el.matches('input[type="radio"][data-key]')) setS(el.dataset.key, el.value);
+      if (el.matches('input[data-person]')) {
+        const b = PEOPLE_BLOCKS[el.dataset.person];
+        const list = peopleList(b).filter((x) => x !== el.dataset.id);
+        if (el.checked) list.push(el.dataset.id);
+        setS('p:' + b.key, list);
+        const c = $('cf-count');
+        if (c) c.textContent = list.length + ' teman dekat';
+      }
+    });
+
+    other.addEventListener('input', (e) => {
+      const el = e.target;
+      if (el.matches('textarea[data-key]')) setS(el.dataset.key, el.value);
+      if (el.matches('.people-search')) {
+        const q = el.value.trim().toLowerCase();
+        other.querySelectorAll('.person').forEach((r) => { r.hidden = !!q && !r.dataset.search.includes(q); });
+      }
+    });
+
+    applyEffects();
+
+    const STORAGE_KEY = 'ig_profile';
+    const DEFAULTS = {
+      name: 'momonk', username: 'Monck_n_key',
+      bio: '', website: '', gender: '',
+      threads: true, ai: false, suggest: true,
+      photo: 'profile.jpg'
+    };
+
+    let saved = loadProfile();
+    let state = { ...saved };
+
+    function loadProfile() {
+      try { return { ...DEFAULTS, ...JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}') }; }
+      catch (e) { return { ...DEFAULTS }; }
+    }
+
+    function applyState() {
+      $('avatar').src = state.photo;
+      $('p-username').textContent = state.username;
+      $('p-name').textContent = state.name;
+      $('bio').value = state.bio;
+      $('gender').value = state.gender;
+      ['threads', 'ai', 'suggest'].forEach((k) => $(k).setAttribute('aria-checked', String(state[k])));
+      updateBioCount();
+      updateSubmit();
+    }
+
+    function updateBioCount() { $('bio-count').textContent = $('bio').value.length + ' / 150'; }
+
+    function isDirty() {
+      return ['bio', 'gender', 'threads', 'ai', 'suggest', 'photo'].some((k) => state[k] !== saved[k]);
+    }
+    function updateSubmit() { $('submit-btn').disabled = !isDirty(); }
+
+    function showToast(message) {
+      const t = $('toast');
+      t.textContent = message;
+      t.classList.add('show');
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => t.classList.remove('show'), 2600);
+    }
+
+    function resizeImage(file, size = 320) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        const url = URL.createObjectURL(file);
+        img.onload = () => {
+          const side = Math.min(img.width, img.height);
+          const canvas = document.createElement('canvas');
+          canvas.width = canvas.height = size;
+          canvas.getContext('2d').drawImage(img, (img.width - side) / 2, (img.height - side) / 2, side, side, 0, 0, size, size);
+          URL.revokeObjectURL(url);
+          resolve(canvas.toDataURL('image/jpeg', 0.85));
+        };
+        img.onerror = () => { URL.revokeObjectURL(url); reject(); };
+        img.src = url;
+      });
+    }
+
+    $('photo-btn').addEventListener('click', () => $('photo-input').click());
+
+    $('photo-input').addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      if (!file.type.startsWith('image/')) { showToast('File harus berupa gambar.'); return; }
+      try {
+        state.photo = await resizeImage(file);
+        $('avatar').src = state.photo;
+        updateSubmit();
+      } catch (err) {
+        showToast('Foto tidak bisa dibuka. Coba file lain.');
+      }
+      e.target.value = '';
+    });
+
+    $('bio').addEventListener('input', (e) => { state.bio = e.target.value.trim(); updateBioCount(); updateSubmit(); });
+    $('gender').addEventListener('change', (e) => { state.gender = e.target.value; updateSubmit(); });
+
+    ['threads', 'ai', 'suggest'].forEach((k) => {
+      $(k).addEventListener('click', () => {
+        state[k] = !state[k];
+        $(k).setAttribute('aria-checked', String(state[k]));
+        updateSubmit();
+      });
+    });
+
+    $('edit-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!isDirty()) return;
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch (err) {
+        showToast('Gagal menyimpan. Coba pakai foto yang lebih kecil.');
+        return;
+      }
+      saved = { ...state };
+      updateSubmit();
+      showToast('Profil disimpan');
+    });
+
+    applyState();
+    go(location.hash.slice(1));
+  </script>
+</body>
+</html>
