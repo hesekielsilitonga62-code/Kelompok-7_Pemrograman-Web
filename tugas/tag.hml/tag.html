@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile - Postingan Ditandai</title>
+  <!-- CDN Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome untuk Icon -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50 text-gray-800 flex justify-center min-h-screen">
+
+  <!-- Container Utama Frame Mobile -->
+  <div class="w-full max-w-[480px] bg-white border-x border-gray-200 min-h-screen pb-6">
+    
+    <!-- Header -->
+    <header class="sticky top-0 bg-white/90 backdrop-blur-md z-10 flex items-center justify-between px-4 py-3 border-b border-gray-100">
+      <div class="flex items-center gap-4">
+        <i class="fa-solid fa-chevron-left text-lg cursor-pointer text-gray-800"></i>
+        <h1 class="font-semibold text-base">Postingan Ditandai</h1>
+      </div>
+      <i class="fa-solid fa-user-tag text-lg text-gray-800 cursor-pointer"></i>
+    </header>
+
+    <!-- Info Banner -->
+    <div class="flex items-center gap-2.5 px-4 py-2.5 bg-gray-50 border-b border-gray-100 text-xs text-gray-500">
+      <i class="fa-solid fa-circle-info text-sky-500 text-sm"></i>
+      <span>Foto dan video di mana akun Anda ditandai oleh orang lain.</span>
+    </div>
+
+    <!-- Tab Filter -->
+    <div class="flex gap-2 px-4 py-3 overflow-x-auto no-scrollbar">
+      <button class="tab-btn active text-xs font-medium px-3.5 py-1.5 rounded-full border border-black bg-black text-white transition-colors" onclick="filterTag(this)">Semua Tag</button>
+      <button class="tab-btn text-xs font-medium px-3.5 py-1.5 rounded-full border border-gray-300 bg-gray-100 text-gray-600 transition-colors" onclick="filterTag(this)">Foto</button>
+      <button class="tab-btn text-xs font-medium px-3.5 py-1.5 rounded-full border border-gray-300 bg-gray-100 text-gray-600 transition-colors" onclick="filterTag(this)">Reels</button>
+    </div>
+
+    <!-- Grid Postingan (3 Kolom) -->
+    <main class="grid grid-cols-3 gap-[3px] pt-1">
+      
+      <!-- Post 1 -->
+      <div class="relative aspect-square overflow-hidden bg-gray-200 group cursor-pointer">
+        <span class="absolute bottom-2 left-2 z-10 w-6 h-6 rounded-full bg-black/60 backdrop-blur-sm text-white flex items-center justify-center text-[10px]">
+          <i class="fa-solid fa-user"></i>
+        </span>
+        <img src="https://picsum.photos/400/400?random=20" alt="Tagged Post" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3 text-white text-xs font-semibold">
+          <span class="flex items-center gap-1"><i class="fa-solid fa-heart"></i> 1.2k</span>
+          <span class="flex items-center gap-1"><i class="fa-solid fa-comment"></i> 34</span>
+        </div>
+      </div>
+
+      <!-- Post 2 (Reels Tagged) -->
+      <div class="relative aspect-square overflow-hidden bg-gray-200 group cursor-pointer">
+        <span class="absolute top-2 right-2 z-10 text-white text-xs drop-shadow">
+          <i class="fa-solid fa-clapperboard"></i>
+        </span>
+        <span class="absolute bottom-2 left-2 z-10 w-6 h-6 rounded-full bg-black/60 backdrop-blur-sm text-white flex items-center justify-center text-[10px]">
+          <i class="fa-solid fa-user"></i>
+        </span>
+        <img src="https://picsum.photos/400/400?random=21" alt="Tagged Post" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3 text-white text-xs font-semibold">
+          <span class="flex items-center gap-1"><i class="fa-solid fa-heart"></i> 3.8k</span>
+          <span class="flex items-center gap-1"><i class="fa-solid fa-comment"></i> 92</span>
+        </div>
+      </div>
+
+      <!-- Post 3 (Carousel Tagged) -->
+      <div class="relative aspect-square overflow-hidden bg-gray-200 group cursor-pointer">
+        <span class="absolute top-2 right-2 z-10 text-white text-xs drop-shadow">
+          <i class="fa-solid fa-clone"></i>
+        </span>
+        <span class="absolute bottom-2 left-2 z-10 w-6 h-6 rounded-full bg-black/60 backdrop-blur-sm text-white flex items-center justify-center text-[10px]">
+          <i class="fa-solid fa-user"></i>
+        </span>
+        <img src="https://picsum.photos/400/400?random=22" alt="Tagged Post" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3 text-white text-xs font-semibold">
+          <span class="flex items-center gap-1"><i class="fa-solid fa-heart"></i> 850</span>
+          <span class="flex items-center gap-1"><i class="fa-solid fa-comment"></i> 19</span>
+        </div>
+      </div>
+
+      <!-- Post 4 -->
+      <div class="relative aspect-square overflow-hidden bg-gray-200 group cursor-pointer">
+        <span class="absolute bottom-2 left-2 z-10 w-6 h-6 rounded-full bg-black/60 backdrop-blur-sm text-white flex items-center justify-center text-[10px]">
+          <i class="fa-solid fa-user"></i>
+        </span>
+        <img src="https://picsum.photos/400/400?random=23" alt="Tagged Post" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3 text-white text-xs font-semibold">
+          <span class="flex items-center gap-1"><i class="fa-solid fa-heart"></i> 2.4k</span>
+          <span class="flex items-center gap-1"><i class="fa-solid fa-comment"></i> 50</span>
+        </div>
+      </div>
+
+      <!-- Post 5 -->
+      <div class="relative aspect-square overflow-hidden bg-gray-200 group cursor-pointer">
+        <span class="absolute bottom-2 left-2 z-10 w-6 h-6 rounded-full bg-black/60 backdrop-blur-sm text-white flex items-center justify-center text-[10px]">
+          <i class="fa-solid fa-user"></i>
+        </span>
+        <img src="https://picsum.photos/400/400?random=24" alt="Tagged Post" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3 text-white text-xs font-semibold">
+          <span class="flex items-center gap-1"><i class="fa-solid fa-heart"></i> 510</span>
+          <span class="flex items-center gap-1"><i class="fa-solid fa-comment"></i> 11</span>
+        </div>
+      </div>
+
+      <!-- Post 6 -->
+      <div class="relative aspect-square overflow-hidden bg-gray-200 group cursor-pointer">
+        <span class="absolute bottom-2 left-2 z-10 w-6 h-6 rounded-full bg-black/60 backdrop-blur-sm text-white flex items-center justify-center text-[10px]">
+          <i class="fa-solid fa-user"></i>
+        </span>
+        <img src="https://picsum.photos/400/400?random=25" alt="Tagged Post" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3 text-white text-xs font-semibold">
+          <span class="flex items-center gap-1"><i class="fa-solid fa-heart"></i> 1.9k</span>
+          <span class="flex items-center gap-1"><i class="fa-solid fa-comment"></i> 41</span>
+        </div>
+      </div>
+
+    </main>
+
+  </div>
+
+  <script src="script-tag.js"></script>
+</body>
+</html>
