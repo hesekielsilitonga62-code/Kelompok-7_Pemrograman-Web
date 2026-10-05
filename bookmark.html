@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bookmark - Saved Posts</title>
+  <link rel="stylesheet" href="style-bookmark.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <div class="bookmark-container">
+    <header class="bookmark-header">
+      <div class="header-left">
+        <i class="fa-solid fa-chevron-left back-btn"></i>
+        <h1>Tersimpan</h1>
+      </div>
+      <i class="fa-solid fa-ellipsis-vertical menu-btn"></i>
+    </header>
+
+    <div class="category-tabs">
+      <button class="tab-item active" onclick="switchTab(this, 'all')">Semua Postingan</button>
+      <button class="tab-item" onclick="switchTab(this, 'audio')">Musik / Audio</button>
+      <button class="tab-item" onclick="switchTab(this, 'reels')">Reels</button>
+    </div>
+
+    <main class="grid-container" id="bookmarkGrid">
+      
+      <div class="grid-item">
+        <img src="OIPrabowo.jpg" alt="Saved Post 1">
+        <div class="overlay">
+          <div class="overlay-info">
+            <span><i class="fa-solid fa-heart"></i> 12m</span>
+            <span><i class="fa-solid fa-comment"></i> 84k</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-item">
+        <span class="media-type-badge"><i class="fa-solid fa-clapperboard"></i></span>
+        <img src="https://picsum.photos/400/400?random=2" alt="Saved Post 2">
+        <div class="overlay">
+          <div class="overlay-info">
+            <span><i class="fa-solid fa-heart"></i> 3.5k</span>
+            <span><i class="fa-solid fa-comment"></i> 120</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-item">
+        <span class="media-type-badge"><i class="fa-solid fa-clone"></i></span>
+        <img src="https://picsum.photos/400/400?random=3" alt="Saved Post 3">
+        <div class="overlay">
+          <div class="overlay-info">
+            <span><i class="fa-solid fa-heart"></i> 890</span>
+            <span><i class="fa-solid fa-comment"></i> 45</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-item">
+        <img src="OIP bahlil.jpg" alt="Saved Post 4">
+        <div class="overlay">
+          <div class="overlay-info">
+            <span><i class="fa-solid fa-heart"></i> 21k</span>
+            <span><i class="fa-solid fa-comment"></i> 92</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-item">
+        <img src="OIP jokowi.jpg" alt="Saved Post 5">
+        <div class="overlay">
+          <div class="overlay-info">
+            <span><i class="fa-solid fa-heart"></i> 540m</span>
+            <span><i class="fa-solid fa-comment"></i> 189k</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-item">
+        <img src="OIP sahroni'.jpg" alt="Saved Post 6">
+        <div class="overlay">
+          <div class="overlay-info">
+            <span><i class="fa-solid fa-heart"></i> 4.3m</span>
+            <span><i class="fa-solid fa-comment"></i> 310k</span>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="bookmark-script.js"></script>
+</body>
+</html>
