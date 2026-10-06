@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Repost</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #fafafa;
+            margin: 0;
+        }
+
+        .header {
+            background: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 25px;
+            font-weight: bold;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .post {
+            width: 400px;
+            max-width: 90%;
+            margin: 30px auto;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .user {
+            padding: 15px;
+            font-weight: bold;
+        }
+
+        .foto {
+            width: 100%;
+            height: 350px;
+            background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 50px;
+        }
+
+        .caption {
+            padding: 15px;
+        }
+
+        .buttons {
+            padding: 10px 15px;
+        }
+
+        button {
+            border: none;
+            background: none;
+            font-size: 16px;
+            cursor: pointer;
+            margin-right: 15px;
+        }
+
+        #repostBtn.active {
+            color: #0095f6;
+            font-weight: bold;
+        }
+
+        .repost-info {
+            padding: 0 15px 15px;
+            color: #555;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        Instagram
+    </div>
+
+    <div class="post">
+
+        <div class="user">
+            👤 risky_lubis
+        </div>
+
+        <div class="foto">
+            📷
+        </div>
+
+        <div class="caption">
+            <b>risky_lubis</b>
+            <br>
+            Contoh postingan Instagram.
+        </div>
+
+        <div class="buttons">
+
+            <button onclick="likePost()">
+                ❤️ Like <span id="like">0</span>
+            </button>
+
+            <button id="repostBtn" onclick="repost()">
+                🔄 Repost
+            </button>
+
+            <button onclick="comment()">
+                💬 Comment
+            </button>
+
+        </div>
+
+        <div class="repost-info">
+            🔄 <span id="repostCount">0</span> repost
+        </div>
+
+    </div>
+
+
+    <script>
+
+        let like = 0;
+        let repostCount = 0;
+        let sudahRepost = false;
+
+        function likePost() {
+
+            like++;
+
+            document.getElementById("like").innerText = like;
+
+        }
+
+
+        function repost() {
+
+            const button = document.getElementById("repostBtn");
+            const count = document.getElementById("repostCount");
+
+            if (sudahRepost == false) {
+
+                repostCount++;
+                sudahRepost = true;
+
+                button.innerHTML = "✅ Reposted";
+                button.classList.add("active");
+
+            } else {
+
+                repostCount--;
+                sudahRepost = false;
+
+                button.innerHTML = "🔄 Repost";
+                button.classList.remove("active");
+
+            }
+
+            count.innerText = repostCount;
+
+        }
+
+
+        function comment() {
+
+            let komentar = prompt("Tulis komentar:");
+
+            if (komentar != null && komentar != "") {
+
+                alert("Komentar berhasil ditambahkan!");
+
+            }
+
+        }
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Repost</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #fafafa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .post {
+            width: 350px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .username {
+            padding: 15px;
+            font-weight: bold;
+        }
+
+        .foto {
+            width: 100%;
+            height: 350px;
+            background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 25px;
+        }
+
+        .button {
+            padding: 15px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: #0095f6;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0077cc;
+        }
+
+        #hasil {
+            text-align: center;
+            padding: 10px;
+            color: #0095f6;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="post">
+
+        <div class="username">
+            @instagram_user
+        </div>
+
+        <div class="foto">
+            POSTINGAN
+        </div>
+
+        <div class="button">
+            <button onclick="repost()">
+                🔄 Repost
+            </button>
+        </div>
+
+        <div id="hasil"></div>
+
+    </div>
+
+    <script>
+        function repost() {
+            document.getElementById("hasil").innerHTML =
+                "✅ Postingan berhasil direpost!";
+        }
+    </script>
+
+</body>
+</html>
