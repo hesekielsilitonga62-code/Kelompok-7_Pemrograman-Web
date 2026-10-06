@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Profile</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS v4 Browser Build -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <style type="text/tailwindcss">
+    @theme {
+      --font-poppins: "Poppins", sans-serif;
+      --font-publicsans: "Public Sans", sans-serif;
+      --font-abel: "Abel", sans-serif;
+      --color-brand-yellow: #f9e902;
+    }
+
+    @layer components {
+      .btn-action {
+        @apply flex-1 rounded-lg bg-[#efefef] py-1.5 text-center text-sm font-semibold text-black transition hover:bg-[#dbdbdb];
+      }
+      .highlight-ring {
+        @apply flex h-20 w-20 items-center justify-center rounded-full border border-neutral-300 bg-neutral-100 p-1 cursor-pointer transition hover:scale-105 flex-shrink-0 overflow-hidden;
+      }
+      .tab-item {
+        @apply flex items-center justify-center py-4 text-neutral-400 hover:text-black;
+      }
+      .tab-active {
+        @apply border-t-2 border-black text-black;
+      }
+    }
+    </style>
+</head>
+<body class="min-h-screen bg-white text-black">
+
+  <main class="mx-auto max-w-4xl px-4 py-8">
+    
+    <!-- HEADER PROFIL -->
+    <header class="mb-8 flex flex-col gap-6 md:flex-row md:items-start md:gap-12">
+      <figure class="relative mx-auto flex-shrink-0 md:mx-0">
+        <img src="profile.jpg" alt="Foto Profil" class="h-32 w-32 rounded-full border border-neutral-200 object-cover md:h-36 md:w-36 bg-neutral-100" />
+      </figure>
+
+      <section class="flex flex-1 flex-col gap-4">
+        <div class="flex items-center gap-4">
+          <h1 class="text-xl font-semibold text-black">Monck_n_key</h1>
+          <button type="button" aria-label="Pengaturan">
+            <img src="setting.png" alt="Pengaturan" class="h-6 w-6 object-contain" />
+          </button>
+        </div>
+
+        <p class="text-sm font-medium text-neutral-700">momonk</p>
+
+        <ul class="flex items-center gap-6 text-sm text-neutral-700">
+          <li><strong class="font-semibold text-black">0</strong> kiriman</li>
+          <li><strong class="font-semibold text-black">0</strong> pengikut</li>
+          <li><strong class="font-semibold text-black">0</strong> diikuti</li>
+        </ul>
+
+        <div class="flex items-center gap-3 pt-2">
+          <button type="button" class="btn-action">Edit profil</button>
+          <button type="button" class="btn-action">Lihat arsip</button>
+        </div>
+      </section>
+    </header>
+
+    <!-- HIGHLIGHTS / SOROTAN -->
+    <section id="highlightsContainer" aria-label="Sorotan Cerita" class="mb-10 flex items-center gap-6 overflow-x-auto pb-2">
+      <article class="flex flex-col items-center gap-2 flex-shrink-0 cursor-pointer" onclick="openStoryViewer(0)" oncontextmenu="openHighlightMenu(event, 0)">
+        <div class="highlight-ring">
+          <img src="profile.jpg" alt="Me" class="h-full w-full rounded-full object-cover bg-neutral-100" />
+        </div>
+        <span class="text-xs text-neutral-600">Me</span>
+      </article>
+
+      <article class="flex flex-col items-center gap-2 flex-shrink-0 cursor-pointer" onclick="openStoryViewer(1)" oncontextmenu="openHighlightMenu(event, 1)">
+        <div class="highlight-ring">
+          <img src="hangout.jpeg" alt="Hangout" class="h-full w-full rounded-full object-cover bg-neutral-100" />
+        </div>
+        <span class="text-xs text-neutral-600">Hangout</span>
+      </article>
+
+      <!-- Tombol Tambah Baru -->
+      <article class="flex flex-col items-center gap-2 cursor-pointer flex-shrink-0" onclick="openStep1Modal()">
+        <div class="highlight-ring text-2xl text-neutral-500">+</div>
+        <span class="text-xs text-neutral-600">Baru</span>
+      </article>
+    </section>
+
+    <!-- NAVIGASI TAB -->
+    <nav aria-label="Navigasi Konten Profil" class="flex justify-around border-t border-neutral-200 text-xs font-semibold tracking-widest uppercase">
+      <a href="#" class="tab-item tab-active flex-1"><img src="post.png" alt="Kiriman" class="h-5 w-5 object-contain" /></a>
+      <a href="#" class="tab-item flex-1"><img src="bookmark.png" alt="Tersimpan" class="h-5 w-5 object-contain" /></a>
+      <a href="#" class="tab-item flex-1"><img src="repost.png" alt="Repost" class="h-5 w-5 object-contain" /></a>
+      <a href="#" class="tab-item flex-1"><img src="tagged.png" alt="Ditandai" class="h-5 w-5 object-contain" /></a>
+    </nav>
+
+    <!-- GRID POSTINGAN -->
+    <section aria-label="Grid Posting" class="mt-4 grid grid-cols-3 gap-1 md:gap-4">
+      <article class="aspect-square w-full overflow-hidden bg-neutral-100"><img src="LETAKKAN_URL_FOTO_POSTINGAN_1.jpg" alt="Post 1" class="h-full w-full object-cover" /></article>
+      <article class="aspect-square w-full overflow-hidden bg-neutral-100"><img src="LETAKKAN_URL_FOTO_POSTINGAN_2.jpg" alt="Post 2" class="h-full w-full object-cover" /></article>
+      <article class="aspect-square w-full overflow-hidden bg-neutral-100"><img src="LETAKKAN_URL_FOTO_POSTINGAN_3.jpg" alt="Post 3" class="h-full w-full object-cover" /></article>
+    </section>
+  </main>
+
+  <!-- MODAL TAHAP 1 (TAMBAH SOROTAN BARU) -->
+  <div id="step1Modal" class="fixed inset-0 z-50 hidden bg-black/80 flex items-center justify-center px-4">
+    <div class="bg-[#262626] text-white w-full max-w-lg rounded-2xl overflow-hidden shadow-2xl flex flex-col relative">
+      <div class="flex items-center justify-between px-6 py-4 border-b border-neutral-700">
+        <button onclick="closeAllModals()" class="text-white text-xl font-light hover:opacity-70">&times;</button>
+        <h2 id="step1Title" class="text-base font-semibold">Sorotan Baru</h2>
+        <div class="w-5"></div>
+      </div>
+      <div class="p-8 flex flex-col gap-6">
+        <input type="text" id="newHighlightName" placeholder="Nama Sorotan" class="w-full bg-[#121212] border border-neutral-700 rounded-lg px-4 py-3 text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-400" />
+        <button onclick="goToStep2()" class="w-full bg-[#0095f6] hover:bg-[#1877f2] text-white font-semibold py-2.5 rounded-lg text-sm transition cursor-pointer">Selanjutnya</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL TAHAP 2 -->
+  <div id="step2Modal" class="fixed inset-0 z-50 hidden bg-black/80 flex items-center justify-center px-4">
+    <div class="bg-[#262626] text-white w-full max-w-xl rounded-2xl overflow-hidden shadow-2xl flex flex-col h-[85vh]">
+      <div class="flex items-center justify-between px-6 py-4 border-b border-neutral-700 flex-shrink-0">
+        <button onclick="backToStep1()" class="text-white text-xl font-light hover:opacity-70">&#8592;</button>
+        <h2 class="text-base font-semibold">Cerita</h2>
+        <button onclick="closeAllModals()" class="text-white text-xl font-light hover:opacity-70">&times;</button>
+      </div>
+      <div class="flex-1 overflow-y-auto p-4">
+        <div id="storySelectionContainer" class="grid grid-cols-3 gap-3 auto-rows-auto"></div>
+      </div>
+      <div class="p-4 border-t border-neutral-700 flex justify-center bg-[#1a1a1a] flex-shrink-0">
+        <button onclick="goToStep3()" class="w-full max-w-sm bg-[#0095f6] hover:bg-[#1877f2] text-white font-semibold py-2.5 rounded-lg text-sm transition cursor-pointer">Selanjutnya</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL TAHAP 3 -->
+  <div id="step3Modal" class="fixed inset-0 z-50 hidden bg-black/80 flex items-center justify-center px-4">
+    <div class="bg-[#262626] text-white w-full max-w-xl rounded-2xl overflow-hidden shadow-2xl flex flex-col h-[85vh]">
+      <div class="flex items-center justify-between px-6 py-4 border-b border-neutral-700">
+        <button onclick="goToStep2()" class="text-white text-xl font-light hover:opacity-70">&#8592;</button>
+        <h2 class="text-base font-semibold">Pilih Sampul</h2>
+        <button onclick="closeAllModals()" class="text-white text-xl font-light hover:opacity-70">&times;</button>
+      </div>
+      <div class="flex-1 overflow-y-auto p-6 flex flex-col items-center gap-6">
+        <div id="coverPreviewContainer" class="relative w-64 h-64 rounded-full overflow-hidden border-4 border-neutral-700 shadow-2xl bg-black flex items-center justify-center"></div>
+        <div class="w-full max-w-md">
+          <p class="text-xs text-neutral-400 mb-2">Pilih dari cerita yang dimasukkan:</p>
+          <div id="coverThumbnailContainer" class="flex gap-3 overflow-x-auto pb-2"></div>
+        </div>
+      </div>
+      <div class="p-4 border-t border-neutral-700 flex justify-center bg-[#1a1a1a]">
+        <button onclick="saveNewOrEditedHighlight()" class="w-full max-w-sm bg-[#0095f6] hover:bg-[#1877f2] text-white font-semibold py-2.5 rounded-lg text-sm transition cursor-pointer">Selesai</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL PEMUTAR SLIDING SOROTAN -->
+  <div id="storyModal" class="fixed inset-0 z-50 hidden bg-black/95 flex items-center justify-center overflow-hidden">
+    <button onclick="closeStoryViewer()" class="absolute top-4 right-6 text-white text-3xl font-light z-50 cursor-pointer hover:opacity-70">&times;</button>
+    <button onclick="prevStory(event)" class="absolute left-6 md:left-12 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-neutral-800/80 hover:bg-neutral-700 text-white flex items-center justify-center z-50 shadow-lg cursor-pointer transition">&#10094;</button>
+    <button onclick="nextStory(event)" class="absolute right-6 md:right-12 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-neutral-800/80 hover:bg-neutral-700 text-white flex items-center justify-center z-50 shadow-lg cursor-pointer transition">&#10095;</button>
+
+    <div id="storySliderTrack" class="flex items-center h-[88vh] transition-transform duration-300 ease-out"></div>
+  </div>
+
+  <!-- MENU OPSI TITIK TIGA (Edit dimatikan sesuai permintaan) -->
+  <div id="storyOptionsMenu" class="fixed inset-0 z-50 hidden bg-black/60 flex items-center justify-center px-4">
+    <div class="bg-[#262626] text-white w-full max-w-sm rounded-2xl overflow-hidden shadow-2xl flex flex-col text-center border border-neutral-700">
+      <button onclick="alert('Fitur edit dinonaktifkan')" class="py-4 border-b border-neutral-700 text-sm font-medium hover:bg-neutral-800 transition cursor-pointer opacity-50">Edit</button>
+      <button onclick="alert('Tentang Akun Ini'); closeStoryOptionsMenu();" class="py-4 border-b border-neutral-700 text-sm font-medium hover:bg-neutral-800 transition cursor-pointer">Tentang akun ini</button>
+      <button onclick="alert('Insight Sorotan Ditampilkan'); closeStoryOptionsMenu();" class="py-4 border-b border-neutral-700 text-sm font-medium hover:bg-neutral-800 transition cursor-pointer">Lihat insight</button>
+      <button onclick="closeStoryOptionsMenu()" class="py-4 text-sm font-semibold hover:bg-neutral-800 transition cursor-pointer">Batal</button>
+    </div>
+  </div>
+
+  <script src="profile-sync.js"></script>
+  <script src="sorotan.js"></script>
+</body>
+</html>
