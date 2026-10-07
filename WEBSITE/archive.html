@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arsip • Instagram</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="archive.css">
+</head>
+<body>
+
+  <main class="page">
+
+    <header class="top">
+      <a href="index.html" class="back" aria-label="Kembali ke profil">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M20 12H4M10 6l-6 6 6 6"/>
+        </svg>
+      </a>
+      <h1 class="title">Arsip</h1>
+    </header>
+
+    <div class="tabs" role="tablist" aria-label="Jenis arsip">
+      <button class="tab" role="tab" id="tab-stories" aria-selected="true" aria-controls="archive-grid">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="3.4 4.2" aria-hidden="true">
+          <circle cx="12" cy="12" r="9.5"/>
+        </svg>
+        Cerita
+      </button>
+    </div>
+
+    <p class="note">Hanya kamu yang bisa melihat cerita yang diarsipkan, kecuali kamu memilih untuk membagikannya.</p>
+
+    <section id="archive-grid" role="tabpanel" aria-labelledby="tab-stories"></section>
+
+  </main>
+
+  <dialog id="viewer" class="viewer" aria-label="Lihat cerita arsip">
+    <div class="viewer-media">
+      <button id="viewer-close" type="button" class="round" aria-label="Tutup">×</button>
+      <button id="viewer-prev" type="button" class="round" aria-label="Sebelumnya">‹</button>
+      <button id="viewer-next" type="button" class="round" aria-label="Berikutnya">›</button>
+      <div id="viewer-frame" class="viewer-frame"></div>
+    </div>
+    <div class="viewer-info">
+      <div style="min-width:0">
+        <p id="viewer-date"></p>
+        <p id="viewer-caption"></p>
+      </div>
+      <button id="viewer-restore" type="button" class="btn-blue">Kembalikan ke profil</button>
+    </div>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script>
+
+    const stories = [
+      { id: 's1', day: '29', month: 'Sep', year: '2026', caption: 'Zamn',       src: 'story-1.jpg', bg: '#1e1b4b' },
+      { id: 's2', day: '18', month: 'Sep', year: '',     caption: 'Lmao wkwk',       src: 'story-2.jpg', bg: '#0f766e' },
+      { id: 's3', day: '14', month: 'Sep', year: '',     caption: 'masterpiece',          src: 'story-3.jpg', bg: '#b45309' },
+      { id: 's4', day: '08', month: 'Jun', year: '',     caption: 'Chill',  src: 'story-4.jpg', bg: '#1d4ed8' },
+      { id: 's5', day: '27', month: 'Mei', year: '',     caption: 'Ngopi',     src: 'story-5.jpg', bg: '#1c1917' },
+      { id: 's6', day: '17', month: 'Agu', year: '2025', caption: 'peak',  src: 'story-6.jpg', bg: '#0369a1' }
+    ];
+
+    const $ = (id) => document.getElementById(id);
+    const grid = $('archive-grid');
+    const viewer = $('viewer');
+    let viewIndex = 0;
+    let lastOpener = null;
+
+    function layerStyle(item) {
+      return item.src
+        ? `background-image:url('${item.src}')`
+        : `background-image:${item.bg}`;
+    }
+
+    function badgeHTML(item) {
+      return `<span class="badge"><b>${item.day}</b><span>${item.month}</span>${item.year ? `<span class="yr">${item.year}</span>` : ''}</span>`;
+    }
+
+    function stickerHTML(item) {
+      const onlyEmoji = /^[\p{Extended_Pictographic}\u200d\ufe0f\s]+$/u.test(item.caption);
+      return `<span class="sticker${onlyEmoji ? ' emoji' : ''}">${item.caption}</span>`;
+    }
+
+    function renderGrid() {
+      if (!stories.length) {
+        grid.innerHTML = `
+          <div class="empty">
+            <strong>Belum ada cerita di arsip</strong>
+            <p>Cerita yang kamu arsipkan akan muncul di sini.</p>
+          </div>`;
+        return;
+      }
+      grid.innerHTML = `
+        <ul class="grid">
+          ${stories.map((item, i) => `
+            <li>
+              <button type="button" class="story" data-index="${i}"
+                aria-label="Buka cerita ${item.day} ${item.month} ${item.year}: ${item.caption}">
+                <span class="story-bg" style="${layerStyle(item)}"></span>
+                <span class="story-frame" style="${layerStyle(item)}">${stickerHTML(item)}</span>
+                ${badgeHTML(item)}
+              </button>
+            </li>`).join('')}
+        </ul>`;
+    }
+
+    function renderViewer() {
+      const item = stories[viewIndex];
+      const frame = $('viewer-frame');
+      frame.style.cssText = layerStyle(item);
+      frame.innerHTML = stickerHTML(item);
+      $('viewer-date').textContent = `${item.day} ${item.month}${item.year ? ' ' + item.year : ''}`;
+      $('viewer-caption').textContent = item.caption;
+      $('viewer-prev').disabled = viewIndex === 0;
+      $('viewer-next').disabled = viewIndex === stories.length - 1;
+    }
+
+    function openViewer(index, opener) {
+      viewIndex = index;
+      lastOpener = opener;
+      renderViewer();
+      viewer.showModal();
+    }
+
+    function step(delta) {
+      const next = viewIndex + delta;
+      if (next < 0 || next >= stories.length) return;
+      viewIndex = next;
+      renderViewer();
+    }
+
+    function showToast(message) {
+      const t = $('toast');
+      t.textContent = message;
+      t.classList.add('show');
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => t.classList.remove('show'), 2500);
+    }
+
+    grid.addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-index]');
+      if (btn) openViewer(Number(btn.dataset.index), btn);
+    });
+
+    $('viewer-close').addEventListener('click', () => viewer.close());
+    $('viewer-prev').addEventListener('click', () => step(-1));
+    $('viewer-next').addEventListener('click', () => step(1));
+
+    viewer.addEventListener('click', (e) => { if (e.target === viewer) viewer.close(); });
+
+    viewer.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') step(-1);
+      if (e.key === 'ArrowRight') step(1);
+    });
+
+    viewer.addEventListener('close', () => {
+      if (lastOpener && document.contains(lastOpener)) lastOpener.focus();
+    });
+
+    $('viewer-restore').addEventListener('click', () => {
+      stories.splice(viewIndex, 1);
+      lastOpener = null;
+      viewer.close();
+      renderGrid();
+      showToast('Dikembalikan ke profil');
+    });
+
+    renderGrid();
+  </script>
+</body>
+</html>
